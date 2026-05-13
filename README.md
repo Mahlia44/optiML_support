@@ -6,6 +6,8 @@ https://arxiv.org/pdf/2406.11110
 optimizers à tester: 
 Adam,AdamW,Muon,Frank-Wolfe
 
+params pour le .py unifié: optimizers, target functions & hyperparams
+
 tous sur linear synthetic dataset
 Mahlia: run baseline sur SGD&friends
 François: clone baseline et fait sur Muon
