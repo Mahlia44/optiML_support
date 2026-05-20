@@ -1,6 +1,6 @@
 # Data and logs
 data/
-outputs/
+# outputs/
 output/
 logs/
 experiments/

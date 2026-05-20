@@ -99,68 +99,68 @@ def make_data(
     return torch.from_numpy(x).float(), torch.from_numpy(y).float()
 
 
-# ── Muon optimizer ────────────────────────────────────────────────────────────
+# # ── Muon optimizer ────────────────────────────────────────────────────────────
 
-class Muon(torch.optim.Optimizer):
-    """Momentum Orthogonal Update optimizer.
+# class Muon(torch.optim.Optimizer):
+#     """Momentum Orthogonal Update optimizer.
 
-    For each parameter matrix G, the gradient momentum buffer is
-    orthogonalized via Newton-Schulz iterations before the weight update.
-    Scalar/vector parameters fall back to plain SGD with momentum.
+#     For each parameter matrix G, the gradient momentum buffer is
+#     orthogonalized via Newton-Schulz iterations before the weight update.
+#     Scalar/vector parameters fall back to plain SGD with momentum.
 
-    Reference: https://arxiv.org/abs/2409.20325
-    """
+#     Reference: https://arxiv.org/abs/2409.20325
+#     """
 
-    def __init__(
-        self,
-        params,
-        lr: float = 0.02,
-        momentum: float = 0.95,
-        nesterov: bool = True,
-        ns_steps: int = 5,
-    ):
-        defaults = dict(lr=lr, momentum=momentum, nesterov=nesterov, ns_steps=ns_steps)
-        super().__init__(params, defaults)
+#     def __init__(
+#         self,
+#         params,
+#         lr: float = 0.02,
+#         momentum: float = 0.95,
+#         nesterov: bool = True,
+#         ns_steps: int = 5,
+#     ):
+#         defaults = dict(lr=lr, momentum=momentum, nesterov=nesterov, ns_steps=ns_steps)
+#         super().__init__(params, defaults)
 
-    @staticmethod
-    def _orthogonalize(G: torch.Tensor, steps: int) -> torch.Tensor:
-        """Newton-Schulz iteration: maps G → G / ||G||_op (approximately)."""
-        a, b, c = 3.4445, -4.7750, 2.0315
-        X = G.float()
-        X = X / (X.norm() + 1e-7)
-        transposed = X.size(0) > X.size(1)
-        if transposed:
-            X = X.T
-        for _ in range(steps):
-            A = X @ X.T
-            B = b * A + c * (A @ A)
-            X = a * X + B @ X
-        if transposed:
-            X = X.T
-        return X.to(G.dtype)
+#     @staticmethod
+#     def _orthogonalize(G: torch.Tensor, steps: int) -> torch.Tensor:
+#         """Newton-Schulz iteration: maps G → G / ||G||_op (approximately)."""
+#         a, b, c = 3.4445, -4.7750, 2.0315
+#         X = G.float()
+#         X = X / (X.norm() + 1e-7)
+#         transposed = X.size(0) > X.size(1)
+#         if transposed:
+#             X = X.T
+#         for _ in range(steps):
+#             A = X @ X.T
+#             B = b * A + c * (A @ A)
+#             X = a * X + B @ X
+#         if transposed:
+#             X = X.T
+#         return X.to(G.dtype)
 
-    def step(self, closure=None):
-        loss = closure() if closure is not None else None
-        for group in self.param_groups:
-            lr = group["lr"]
-            mu = group["momentum"]
-            nesterov = group["nesterov"]
-            ns_steps = group["ns_steps"]
-            for p in group["params"]:
-                if p.grad is None:
-                    continue
-                g = p.grad.data
-                state = self.state[p]
-                if "buf" not in state:
-                    state["buf"] = torch.zeros_like(g)
-                buf = state["buf"]
-                buf.mul_(mu).add_(g)
-                update = g.add(buf, alpha=mu) if nesterov else buf.clone()
-                if update.ndim >= 2:
-                    update = self._orthogonalize(update, ns_steps)
-                    update = update * (update.numel() ** 0.5)
-                p.data.add_(update, alpha=-lr)
-        return loss
+#     def step(self, closure=None):
+#         loss = closure() if closure is not None else None
+#         for group in self.param_groups:
+#             lr = group["lr"]
+#             mu = group["momentum"]
+#             nesterov = group["nesterov"]
+#             ns_steps = group["ns_steps"]
+#             for p in group["params"]:
+#                 if p.grad is None:
+#                     continue
+#                 g = p.grad.data
+#                 state = self.state[p]
+#                 if "buf" not in state:
+#                     state["buf"] = torch.zeros_like(g)
+#                 buf = state["buf"]
+#                 buf.mul_(mu).add_(g)
+#                 update = g.add(buf, alpha=mu) if nesterov else buf.clone()
+#                 if update.ndim >= 2:
+#                     update = self._orthogonalize(update, ns_steps)
+#                     update = update * (update.numel() ** 0.5)
+#                 p.data.add_(update, alpha=-lr)
+#         return loss
 
 
 # ── Optimizer factory ─────────────────────────────────────────────────────────
@@ -173,7 +173,7 @@ def build_optimizer(args, params) -> torch.optim.Optimizer:
     elif args.optimizer == "adamw":
         return torch.optim.AdamW(params, lr=args.lr, weight_decay=args.weight_decay)
     elif args.optimizer == "muon":
-        return Muon(params, lr=args.lr, momentum=args.muon_momentum, ns_steps=args.muon_ns_steps)
+        return torch.optim.Muon(params, lr=args.lr, momentum=args.muon_momentum, ns_steps=args.muon_ns_steps, weight_decay=args.weight_decay)
     else:
         raise ValueError(f"Unknown optimizer '{args.optimizer}'")
 

@@ -51,16 +51,13 @@ uv run train_baseline.py --optimizer gd --target linear --n_iters 50 --output_di
 
 **Full runs**
 ```bash
-# Mahlia — GD & SGD baselines
 uv run train_baseline.py --optimizer gd   --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer sgd  --batch_size 512 --target linear --n_iters 200000 --n_trajs 5 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer sgd  --batch_size 32  --target linear --n_iters 200000 --n_trajs 5 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 
-# François — Muon
-uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --output_dir outputs/linear
+uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 
-# Matteo — Adam and AdamW
-uv run train_baseline.py --optimizer adam --target linear --n_iters 200000 --output_dir outputs/linear
-uv run train_baseline.py --optimizer adamw --target linear --n_iters 200000 --output_dir outputs/linear
+uv run train_baseline.py --optimizer adam --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer adamw --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 ```
