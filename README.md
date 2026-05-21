@@ -1,19 +1,29 @@
-# sgd-finds-support
+# Optimization for ML
+# SGD finds support
 
 https://arxiv.org/pdf/2406.11110
 
 
-optimizers à tester: 
-Adam,AdamW,Muon,Frank-Wolfe
+- adamW add weight decay -> Mahlia
+- Muon try other params -> Mahlia
+- sine keep going + staircase -> Mahlia
+- check for MNIST implementation -> Matteo
+- try to understand why Adam works -> François
+- start plan report: François
 
-params pour le .py unifié: optimizers, target functions & hyperparams
+- metrics:
+    - weight matrix
+    - gram matrix
+    - bar plot (eigenvalues, singularvalues)
+    - norm irrelevant
+    - per layer effective rank
 
-tous sur linear synthetic dataset
-Mahlia: run baseline sur SGD&friends
-François: clone baseline et fait sur Muon
-Matteo: clone baseline et fait sur Adam
-Mahlia,François,Matteo: have a lot of fun :)
-
+Report :
+- read guidelines
+- describe the goal 
+- comparisons :
+    - optimizers
+    - target functions
 
 
 ## Setup
@@ -61,3 +71,12 @@ uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --out
 uv run train_baseline.py --optimizer adam --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer adamw --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 ```
+
+
+
+
+
+
+
+
+
