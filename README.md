@@ -4,12 +4,11 @@
 https://arxiv.org/pdf/2406.11110
 
 
-- adamW add weight decay -> Mahlia
 - Muon try other params -> Mahlia
-- sine keep going + staircase -> Mahlia
-- check for MNIST implementation -> Matteo
+- staircase -> Mahlia
+- check for CIFAR10 implementation -> Matteo
 - try to understand why Adam works -> François
-- start plan report: François
+- start analysis and discussion: François
 
 - metrics:
     - weight matrix
@@ -60,6 +59,7 @@ uv run train_baseline.py --optimizer gd --target linear --n_iters 50 --output_di
 ```
 
 **Full runs**
+Linear
 ```bash
 uv run train_baseline.py --optimizer gd   --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer sgd  --batch_size 512 --target linear --n_iters 200000 --n_trajs 5 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
@@ -69,9 +69,21 @@ uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target linear --n
 uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 
 uv run train_baseline.py --optimizer adam --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer adamw --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 ```
 
+Sine
+```bash
+uv run train_baseline.py --optimizer gd   --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer sgd  --batch_size 512 --target sine --n_iters 200000 --n_trajs 5 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer sgd  --batch_size 32  --target sine --n_iters 200000 --n_trajs 5 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+
+uv run train_baseline.py --optimizer muon --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+
+uv run train_baseline.py --optimizer adam --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
+```
 
 
 
