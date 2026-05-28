@@ -24,6 +24,12 @@ Report :
     - optimizers
     - target functions
 
+28/05
+Bucket list trucs à faire : 
+- Tester muon avec différents r (nombre de relevant features) 
+- Tester muon+wd en comparer avec gw+wd et muon de base
+- 
+
 
 ## Setup
 
