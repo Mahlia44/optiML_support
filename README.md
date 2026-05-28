@@ -85,6 +85,19 @@ uv run train_baseline.py --optimizer adam --target sine --n_iters 200000 --outpu
 uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
 ```
 
+Staircase
+```bash
+uv run train_baseline.py --optimizer gd   --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer sgd  --batch_size 512 --target staircase --n_iters 200000 --n_trajs 5 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer sgd  --batch_size 32  --target staircase --n_iters 200000 --n_trajs 5 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+
+uv run train_baseline.py --optimizer muon --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+
+uv run train_baseline.py --optimizer adam --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+```
+
 
 
 
