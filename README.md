@@ -4,12 +4,6 @@
 https://arxiv.org/pdf/2406.11110
 
 
-- Muon try other params -> Mahlia
-- staircase -> Mahlia
-- check for CIFAR10 implementation -> Matteo
-- try to understand why Adam works -> François
-- start analysis and discussion: François
-
 - metrics:
     - weight matrix
     - gram matrix
@@ -17,12 +11,12 @@ https://arxiv.org/pdf/2406.11110
     - norm irrelevant
     - per layer effective rank
 
-Report :
-- read guidelines
-- describe the goal 
-- comparisons :
-    - optimizers
-    - target functions
+
+meeting:
+- remove AdamW
+- Matteo: refaire CIFAR comme paper
+- Francois: écrire la partie Results
+- Mahlia : linear muon changer r=10,15
 
 
 ## Setup
@@ -92,7 +86,7 @@ uv run train_baseline.py --optimizer sgd  --batch_size 512 --target staircase --
 uv run train_baseline.py --optimizer sgd  --batch_size 32  --target staircase --n_iters 200000 --n_trajs 5 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
 
-uv run train_baseline.py --optimizer muon --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
+uv run train_baseline.py --optimizer muon --weight_decay 0.1 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
 
 uv run train_baseline.py --optimizer adam --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
 uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
