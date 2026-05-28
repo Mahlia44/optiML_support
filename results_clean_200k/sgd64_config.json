@@ -1,0 +1,39 @@
+{
+  "optimizer": "sgd",
+  "run_name": "sgd64",
+  "max_steps": 200000,
+  "batch_size": 64,
+  "lr": 0.01,
+  "weight_decay": 0.0,
+  "seed": 42,
+  "hidden_dims": [
+    512,
+    512
+  ],
+  "bias": false,
+  "muon_momentum": 0.95,
+  "muon_nesterov": false,
+  "muon_ns_steps": 5,
+  "data_dir": "./data",
+  "output_dir": "./results_clean_200k",
+  "img_size": 224,
+  "embed_batch_size": 256,
+  "eval_batch_size": 1024,
+  "cifar_ckpt": null,
+  "recompute_embeddings": false,
+  "eval_every": 5000,
+  "checkpoint_fracs": [
+    0.0,
+    0.01,
+    0.05,
+    0.1,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "clip_grad": 0.0,
+  "device": "auto",
+  "embedding_dim": 512,
+  "n_layers": 3
+}
