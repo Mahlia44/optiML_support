@@ -12,17 +12,12 @@ https://arxiv.org/pdf/2406.11110
     - per layer effective rank
 
 
-meeting:
+28/05
+Bucket list trucs à faire : 
 - remove AdamW
 - Matteo: refaire CIFAR comme paper
 - Francois: écrire la partie Results
 - Mahlia : linear muon changer r=10,15
-
-28/05
-Bucket list trucs à faire : 
-- Tester muon avec différents r (nombre de relevant features) 
-- Tester muon+wd en comparer avec gw+wd et muon de base
-- 
 
 
 ## Setup
