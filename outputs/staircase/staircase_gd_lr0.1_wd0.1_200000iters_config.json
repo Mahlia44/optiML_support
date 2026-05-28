@@ -1,0 +1,32 @@
+{
+  "optimizer": "gd",
+  "target": "staircase",
+  "n_iters": 200000,
+  "n_trajs": 1,
+  "lr": 0.1,
+  "weight_decay": 0.1,
+  "batch_size": 512,
+  "clip_value": 1.0,
+  "muon_momentum": 0.95,
+  "muon_ns_steps": 5,
+  "hiddens": [
+    15,
+    15,
+    15
+  ],
+  "relu": false,
+  "init_method": "he_normal",
+  "n_samples": 5000,
+  "input_dim": 15,
+  "n_relevant": 5,
+  "noise": 0.001,
+  "seed_init": 0,
+  "output_dir": "outputs/staircase",
+  "run_name": "staircase_gd_lr0.1_wd0.1_200000iters",
+  "wandb_entity": "mahlia-merville-epfl",
+  "wandb_project": "sgd-finds-support",
+  "no_wandb": false,
+  "d": 15,
+  "r": 5,
+  "n_layers": 4
+}
