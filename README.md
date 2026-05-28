@@ -18,6 +18,12 @@ meeting:
 - Francois: écrire la partie Results
 - Mahlia : linear muon changer r=10,15
 
+28/05
+Bucket list trucs à faire : 
+- Tester muon avec différents r (nombre de relevant features) 
+- Tester muon+wd en comparer avec gw+wd et muon de base
+- 
+
 
 ## Setup
 
