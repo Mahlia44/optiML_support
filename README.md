@@ -114,6 +114,11 @@ merge tous les results cifar et les mettre dans un seul dir
 
 
 
+dans discussion parler du temps a run aussi (eg GD très bon mais lent) 
+
+
+
+
 
 
 
