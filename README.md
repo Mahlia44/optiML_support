@@ -98,6 +98,22 @@ uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target staircas
 
 
 
+garder : 
+/source 
+/train_baseline.py
+/cifar10_models 
+notebook cifar 
+
+supprimer: 
+/imagenet, /illustrative-examples, /public, /sgd-support, /vision-datasets
+
+créer /script et /notebook
+
+merge tous les results cifar et les mettre dans un seul dir 
+
+
+
+
 
 
 
