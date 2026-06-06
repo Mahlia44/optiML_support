@@ -4,6 +4,10 @@
 https://arxiv.org/pdf/2406.11110
 
 
+
+#TODO : réécrire le README
+
+
 - metrics:
     - weight matrix
     - gram matrix
