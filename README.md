@@ -8,22 +8,6 @@ https://arxiv.org/pdf/2406.11110
 #TODO : réécrire le README
 
 
-- metrics:
-    - weight matrix
-    - gram matrix
-    - bar plot (eigenvalues, singularvalues)
-    - norm irrelevant
-    - per layer effective rank
-
-
-28/05
-Bucket list trucs à faire : 
-- remove AdamW
-- Matteo: refaire CIFAR comme paper
-- Francois: écrire la partie Results
-- Mahlia : linear muon changer r=10,15
-
-
 ## Setup
 
 Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then:
@@ -70,7 +54,6 @@ uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --n_r
 uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --n_relevant 15 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 
 uv run train_baseline.py --optimizer adam --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
 ```
 
 Sine
@@ -83,7 +66,6 @@ uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target sine --n_i
 uv run train_baseline.py --optimizer muon --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
 
 uv run train_baseline.py --optimizer adam --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
 ```
 
 Staircase
@@ -96,7 +78,6 @@ uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target staircase 
 uv run train_baseline.py --optimizer muon --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
 
 uv run train_baseline.py --optimizer adam --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer adamw --weight_decay 0.01 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
 ```
 
 
