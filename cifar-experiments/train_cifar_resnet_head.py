@@ -44,8 +44,7 @@ python train_cifar_resnet_head.py --optimizer muon --batch_size 128 --lr 0.02 --
 
 Notes
 -----
-By default the backbone is torchvision ResNet18 ImageNet weights. If you have a
-CIFAR-trained ResNet checkpoint, pass --cifar_ckpt path/to/checkpoint.pth.
+By default the backbone is torchvision ResNet18 ImageNet weights.
 The script removes the final fc layer and caches 512-d embeddings.
 """
 
