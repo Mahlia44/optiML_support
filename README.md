@@ -1,110 +1,108 @@
-# Optimization for ML
-# SGD finds support
+# Which Optimizers Find the Support?
+## Optimization for Machine Learning - CS-439
+### by Mahlia Merville-Hipeau, François Goybet, Matteo Pinto
 
-https://arxiv.org/pdf/2406.11110
+A study of whether different optimizers (GD, SGD, Adam, Muon) learn to
+identify the **relevant feature support** of a sparse target function - i.e.
+whether the first layer of an MLP collapses onto the few coordinates that
+actually matter and discards the irrelevant ones.
 
+The setup follows the sparse-support learning problem described by Beneventano et al. in
+[How Neural Networks Learn the Support is an Implicit Regularization Effect of SGD](https://arxiv.org/abs/2406.11110). We train small MLPs on
+synthetic targets where only the first `r` of `d` input features are relevant,
+and measure how much weight each optimizer places on the irrelevant
+coordinates. A preliminary CIFAR-10 extension is included as a realistic (and
+harder to interpret) analogue.
 
+The full write-up is in [report.pdf](report.pdf).
 
-#TODO : réécrire le README
+## Installation
 
-
-## Setup
-
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/), then sync
+the environment:
 
 ```bash
 uv sync
 ```
 
-Training curves are logged to [Weights & Biases](https://wandb.ai). Make sure you are logged in:
+Training curves are optionally logged to [Weights & Biases](https://wandb.ai).
+To enable logging, log in once and pass your entity at run time
+(or use `--no_wandb` to skip it entirely):
 
 ```bash
 uv run wandb login
 ```
 
-The script will prompt you for your **wandb entity** (your W&B username or team name) at the start of each run. You can also pass it directly with `--wandb_entity <name>` to skip the prompt. Use `--no_wandb` to disable logging entirely.
+## Repository structure
 
-## Training baselines
+```
+optiML_support/
+├── train_baseline.py      # train MLPs on synthetic targets (main entry point)
+├── visualize.ipynb        # generate all report plots from saved runs
+├── source/                # model and plotting utilities
+│   ├── models.py          # configurable linear / ReLU MLP
+│   ├── trainer.py         # training loop + per-layer metric callbacks
+│   └── utils.py           # plotting and analysis helpers
+├── outputs/               # saved runs (the trained "models")
+│   ├── linear/            # one folder per target function, each holding
+│   ├── sine/              #   {run}.npz        – weights (init/post) + curves
+│   └── staircase/         #   {run}_config.json – full hyperparameter config
+├── cifar-experiments/     # realistic CIFAR-10 extension (see its own README)
+└── report.pdf             # report
+```
 
-`train_baseline.py` trains an MLP on a synthetic dataset and saves weights + curves to disk for visualization.
+- **`outputs/`** stores the trained models. Each run produces an `.npz` file
+  (initial/final weight matrices plus loss and irrelevant-norm curves) and a
+  matching `_config.json`. These are the inputs consumed by the notebook.
+- **`source/`** holds the reusable code: the `MLP` definition and the plotting/analysis utilities.
+- **`cifar-experiments/`** contains a self-contained extension that trains an
+  MLP head on frozen ResNet-18 embeddings. See
+  [cifar-experiments/README.md](cifar-experiments/README.md) for details.
+
+## Training
+
+`train_baseline.py` trains an MLP on a synthetic dataset and writes the weights
+and training curves to `--output_dir`.
 
 **Key arguments**
-- `--optimizer`: `gd` (full-batch), `sgd`, `adam`, `adamw`, `muon`
-- `--batch_size`: mini-batch size (SGD/Adam/Muon only)
-- `--target`: `linear`, `sine`, `staircase`
-- `--n_iters`, `--lr`, `--weight_decay`, `--n_trajs`, `--hiddens`, ...
 
-Outputs land in `--output_dir` as `{run_name}.npz` (weights + curves) and `{run_name}_config.json`.
+| Argument          | Choices / type                          | Description                              |
+|-------------------|-----------------------------------------|------------------------------------------|
+| `--optimizer`     | `gd`, `sgd`, `adam`, `adamw`, `muon`    | `gd` is full-batch (ignores batch size)  |
+| `--target`        | `linear`, `sine`, `staircase`           | Synthetic target function                |
+| `--batch_size`    | int                                     | Mini-batch size (SGD / Adam / Muon)      |
+| `--n_iters`       | int                                     | Total gradient steps                     |
+| `--lr`            | float                                   | Learning rate                            |
+| `--weight_decay`  | float                                   | L2 weight decay                          |
+| `--n_trajs`       | int                                     | Independent training trajectories        |
+| `--output_dir`    | path                                    | Where to write results                   |
 
-**Smoke test**
+Run `uv run train_baseline.py --help` for the full list.
+
+**Example run** — full-batch GD on the linear target:
+
+```bash
+uv run train_baseline.py \
+    --optimizer gd \
+    --target linear \
+    --n_iters 200000 \
+    --output_dir outputs/linear
+```
+
+Swap `--optimizer`, `--target`, and `--batch_size` to reproduce the other runs
+in `outputs/`. A quick smoke test:
+
 ```bash
 uv run train_baseline.py --optimizer gd --target linear --n_iters 50 --output_dir outputs/test
 ```
 
-**Full runs**
-Linear
+## Visualization
+
+Once runs are saved under `outputs/`, open
+[visualize.ipynb](visualize.ipynb) to reproduce every figure in the report
+(loss curves, irrelevant-weight norms, and per-target comparisons across
+optimizers):
+
 ```bash
-uv run train_baseline.py --optimizer gd   --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer sgd  --batch_size 512 --target linear --n_iters 200000 --n_trajs 5 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer sgd  --batch_size 32  --target linear --n_iters 200000 --n_trajs 5 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-
-uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --n_relevant 10 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer muon --target linear --n_iters 200000 --n_relevant 15 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
-
-uv run train_baseline.py --optimizer adam --target linear --n_iters 200000 --output_dir outputs/linear --wandb_entity mahlia-merville-epfl
+uv run jupyter notebook visualize.ipynb
 ```
-
-Sine
-```bash
-uv run train_baseline.py --optimizer gd   --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer sgd  --batch_size 512 --target sine --n_iters 200000 --n_trajs 5 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer sgd  --batch_size 32  --target sine --n_iters 200000 --n_trajs 5 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-
-uv run train_baseline.py --optimizer muon --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-
-uv run train_baseline.py --optimizer adam --target sine --n_iters 200000 --output_dir outputs/sine --wandb_entity mahlia-merville-epfl
-```
-
-Staircase
-```bash
-uv run train_baseline.py --optimizer gd   --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer sgd  --batch_size 512 --target staircase --n_iters 200000 --n_trajs 5 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer sgd  --batch_size 32  --target staircase --n_iters 200000 --n_trajs 5 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-uv run train_baseline.py --optimizer gd   --weight_decay 0.1 --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-
-uv run train_baseline.py --optimizer muon --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-
-uv run train_baseline.py --optimizer adam --target staircase --n_iters 200000 --output_dir outputs/staircase --wandb_entity mahlia-merville-epfl
-```
-
-
-
-
-garder : 
-/source 
-/train_baseline.py
-/cifar10_models 
-notebook cifar 
-
-supprimer: 
-/imagenet, /illustrative-examples, /public, /sgd-support, /vision-datasets
-
-créer /script et /notebook
-
-merge tous les results cifar et les mettre dans un seul dir 
-
-
-
-
-dans discussion parler du temps a run aussi (eg GD très bon mais lent) 
-
-
-
-
-
-
-
-

@@ -1,30 +1,6 @@
-#!/usr/bin/env python3
 """
 Train an MLP on a synthetic dataset with configurable optimizer and target function.
 Saves model weights and training curves for later visualization.
-
-Usage examples
---------------
-# Full-batch gradient descent, linear target:
-python train_baseline.py --optimizer gd --target linear --n_iters 20000
-
-# Mini-batch SGD, multiple batch sizes:
-python train_baseline.py --optimizer sgd --batch_size 512 --n_iters 200000 --n_trajs 5
-python train_baseline.py --optimizer sgd --batch_size 128 --n_iters 200000 --n_trajs 5
-python train_baseline.py --optimizer sgd --batch_size 32  --n_iters 200000 --n_trajs 5
-python train_baseline.py --optimizer sgd --batch_size 1   --n_iters 200000 --n_trajs 5
-
-# GD with weight decay (gold baseline):
-python train_baseline.py --optimizer gd --weight_decay 0.1 --n_iters 5000
-
-# Adam / Muon:
-python train_baseline.py --optimizer adam --lr 1e-3 --target sine
-python train_baseline.py --optimizer muon --lr 0.02 --target staircase
-
-Outputs (in --output_dir)
---------------------------
-{run_name}.npz         – numpy arrays: weights (init/post) + loss/irelnorm curves
-{run_name}_config.json – full hyperparameter config
 """
 
 import argparse
